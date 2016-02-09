@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.yarn.api.ApplicationConstants;
 import org.apache.hadoop.yarn.api.protocolrecords.AllocateResponse;
 import org.apache.hadoop.yarn.api.records.*;
@@ -60,7 +61,7 @@ public class ApplicationMasterServlet extends HttpServlet
 
     // Obtain allocated containers, launch and check for responses
 
-    public void containerAllocate() throws IOException, YarnException, InterruptedException {
+    public void containerAllocate(String[] parameters) throws IOException, YarnException, InterruptedException {
 
 
 
@@ -77,15 +78,16 @@ public class ApplicationMasterServlet extends HttpServlet
                         Records.newRecord(ContainerLaunchContext.class);
                 ctx.setCommands(
                         Collections.singletonList(
-                                //  "ls -ltr" +
+
                                 "$JAVA_HOME/bin/java" +
                                         " -Xmx256M" +
                                         " com.hortonworks.simpleyarnapp.ApplicationContainer" +
+                                        " " + StringUtils.join(" ", parameters) +
                                         " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" +
                                         " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr"
                         ));
                 LocalResource appMasterJar = Records.newRecord(LocalResource.class);
-                setupContainerJar(new Path("hdfs:///app/gs-yarn-basic/simple-yarn-app-1.1.0.jar"), appMasterJar);
+                setupContainerJar(new Path("hdfs:///yarn_application/simple-yarn-app-1.1.0.jar"), appMasterJar);
                 ctx.setLocalResources(Collections.singletonMap("simple-yarn-app-1.1.0.jar", appMasterJar));
 
 
@@ -140,7 +142,7 @@ public class ApplicationMasterServlet extends HttpServlet
         }
         // Make container requests to ResourceManager
         try {
-            yarnAM.containerAllocate();
+            yarnAM.containerAllocate(new String[] {"test"});
         } catch (YarnException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

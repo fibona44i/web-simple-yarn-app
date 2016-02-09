@@ -13,8 +13,9 @@ import java.net.URLClassLoader;
  */
 public class ApplicationContainer {
     public static void main(String args[]) throws Exception {
+        System.out.println(args[0]);
         System.out.println("Launching ApplicationContainer");
-
+/*
         ClassLoader cl = ClassLoader.getSystemClassLoader();
 
         URL[] urls = ((URLClassLoader)cl).getURLs();
@@ -22,6 +23,7 @@ public class ApplicationContainer {
         for(URL url: urls) {
             System.out.println(url.getFile());
         }
+*/
 
         /*
         Server server = new Server(8080);
