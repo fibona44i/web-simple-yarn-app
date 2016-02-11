@@ -45,7 +45,7 @@ public class Client {
             Collections.singletonList(
                     "$JAVA_HOME/bin/java" +
                             " -Xmx256M" +
-                            " com.hortonworks.simpleyarnapp.ApplicationMaster" +
+                            " com.hortonworks.simpleyarnapp.ApplicationMasterServlet" +
                             " " + StringUtils.join(" ", parameters) +
                             //"ls -ltr" +
                             " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" +
